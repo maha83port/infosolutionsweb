@@ -1,0 +1,405 @@
+
+<section class="">
+  <div class="container text-center">
+      <h2 class="title">Login / Register</h2>
+      <span class="sub-title">Home > Login / Register</span>
+  </div>
+</section> <!-- header-title -->
+<section class="contact-section section-padding20">
+  <div class="wrapper container gap-top-50">
+<div class="j-tabs-container">
+
+<!-- start tab #1 (click)="AddFiles()" -->
+
+<label class="j-tabs-label" for="tab1"  title="Add Files">
+<span> Step 1 <br/> Add Files</span>
+</label>
+<!-- end tab #1 -->
+
+<!-- start tab #2 -->
+
+<!--<label class="j-tabs-label" for="tab2" (click)="SignIn()" title="SignIn/SignUp">
+<span>Step 2 <br/> SignIn/SignUp</span>
+</label>-->
+<!-- end tab #2 -->
+
+<!-- start tab #3 -->
+
+<!--<label class="j-tabs-label" for="tab3"  title="Billing Details">
+<span>Step 2 <br/> Billing Details</span>
+</label>-->
+<button class="j-tabs-label" for="tab3" (click)="BillingDetails()" title="Billing Details" [disabled]="currentUser"><span>Step 3 <br/> Billing Details</span></button>
+<!-- end tab #3 -->
+
+<!-- start form #1 -->
+<div  class="" *ngIf="step1">
+   
+    
+<form name="companyForm" #f="ngForm"  class="j-forms" role="form" novalidate>
+<div class="content">
+
+  <div class="j-row">
+
+    <div class="span12">
+
+      <div class="divider-text gap-top-20 gap-bottom-45">
+        <span>Add Files</span>
+      </div>
+ 
+      <!-- start login -->
+      <div class="j-row">
+      <div class="span6 unit">      
+      <div class="unit">
+          <div class="input">
+            <input type="text"  name="title" placeholder="Title" />
+          </div>
+        </div>
+      
+      <!-- start keep logged -->
+      <div class="unit">
+        <div class="input">
+            <textarea placeholder="You can include any notes which needs to be passed onto the transcribers. You may want to include the title of your podcast, useful websites, unusual words, keywords and acronyms, and the names of the speakers." name="description"></textarea>
+        </div>
+        
+      </div>
+      <!-- end keep logged -->
+      
+      </div>
+      <!-- end login -->
+
+      <!-- start password -->
+      <div class="span6 unit">
+      <div class="unit">
+        <!--Start UPLOAD-->
+              <form #f="ngForm" enctype="multipart/form-data" novalidate>              
+              <div class="dropbox">
+                <input type="file" multiple
+                  name="uploadFieldName[]" (change)="filesChange($event.target.name, $event.target.files)" 
+                  [disabled]="currentStatus === STATUS_SAVING" accept="pdf/*" #photos>
+                <p *ngIf="currentStatus === STATUS_INITIAL">
+                  Drag your file(s) here to begin<br>
+                  or click to browse
+                </p>
+                <p *ngIf="currentStatus === STATUS_SAVING">
+                  Uploading {{ photos.files.length }} files... 
+                </p>
+              </div>
+            </form>
+            <!--SUCCESS-->
+            <!--<div class="margin-20" *ngIf="currentStatus === STATUS_SUCCESS">
+              
+              
+              <p>
+                <a href="javascript:void(0)" (click)="reset()">Upload again</a>
+              </p>
+              <ul class="list-unstyled">
+                <li *ngFor="let item of uploadedFiles">
+                  {{item.url}}
+                </li>
+              </ul>
+            </div>-->
+            <!--FAILED-->
+            <div class="margin-20" *ngIf="currentStatus === STATUS_FAILED">
+              <p class="error">Uploaded failed.</p>
+              <p>
+                <a href="javascript:void(0)" (click)="reset()">Try again</a>
+              </p>
+              <pre>{{ uploadError | json }}</pre>
+            </div>
+            <!-- End File Upload -->
+      </div>
+      </div>
+      </div>      
+
+    </div>
+    <!-- end /.span6 -->
+  </div>
+  <!-- end /.j-row -->
+  
+  <div class="j-row" *ngIf="uploadedFiles.length >0">
+      <div class="span12 unit">
+        <table class="table">
+          <tr>
+            <th>S.No</th>
+            <th>Title/File Name</th>
+            <th>Service</th>
+            <th>Duration </th>
+            <th>Cost</th>
+            <th>Action</th>
+          </tr>
+          <tr *ngFor="let item of uploadedFiles; let index = index">
+            <td>{{index + 1}}</td>
+            <td style="width:40%">{{item.upload_name}}</td>
+            <td style="width:30%"><div class="unit">
+              <div class="input">
+                <select #service_id="ngModel" name="service_id{{index}}" [(ngModel)]= "item.service_id" #input (change)="calculateCost($event.target.value, 'service_id', item.id, item.service_id)">
+                  <option *ngFor="let ser of services.services" [value]="ser.service_id">{{ser.service_name}}</option>
+                  
+              </select>
+              </div>
+              <label class="checkbox">
+                <input type="checkbox" [checked]="item.timestamps" (change)="calculateCost(item.timestamps, 'timestamps', item.id, item.service_id)" #timestamps="ngModel" name="timestamps{{index}}"  [(ngModel)]= "item.timestamps">
+                <i></i>
+                Add Timestamps ($0.15/m) 
+              </label>
+              <label class="checkbox">
+                <input type="checkbox" [checked]="item.audio_difficult" (change)="calculateCost(item.audio_difficult, 'audio_difficult', item.id, item.service_id)" #audio_difficult="ngModel" name="audio_difficult{{index}}" [(ngModel)]= "item.audio_difficult">
+                <i></i>
+                This audio is difficult ($0.75/m)
+              </label>
+              <p>Est. Delivery Date(PST): {{item.ext_date}}</p>
+            </div></td>
+            <td style="width:10%"><input type="text" name="duration{{index}}" #input (blur)="calculateCost($event.target.value, 'duration', item.id, item.service_id)"  #duration="ngModel" [(ngModel)]= "item.duration" class="form-control"/></td>
+            <td style="width:10%">{{item.cost | currency }}</td>
+            <td style="width:10%"><a (click)="fileDelete(item.id, index)" >Delete</a></td>
+          </tr>
+          <tr>
+            <td colspan="3">TOTAL</td>
+            <td>{{tot_duration}}</td>
+            <td>{{tot_cost | currency}}</td>
+            <td><button  class="primary-btn" (click)="checkout(uploadedFiles)" type="submit">CHECKOUT</button></td>
+          </tr>
+        </table>
+      </div>
+     
+  </div>
+  
+</div>
+<!-- end /.content -->
+</form>
+
+</div>
+<!-- end form #1 -->
+
+<!-- start form #2 -->
+<!--<div  class="" *ngIf="step2">
+<form action="" method="" class="j-forms" novalidate>
+
+<div class="content">
+
+  <div class="divider-text gap-top-20 gap-bottom-45">
+    <span>SignIn/SignUp</span>
+  </div>
+
+
+  
+  <div class="j-row">
+    <div class="span6 unit">
+      <div class="input" *ngIf="currentUser">
+        
+        <button (click)="loginReg()"  class="primary-btn">LOGIN / REGISTER</button>
+      </div>
+       <div class="input" *ngIf="!currentUser">
+          <p>You have alredy Register and Login successfully</p>
+          <button (click)="BillingDetails()"  class="primary-btn">Go Billing Details</button>
+        </div>
+    </div>
+  
+  </div>
+ 
+
+
+
+
+  
+
+</div>
+
+
+</form>
+</div>-->
+<!-- end form #2 -->
+
+<!-- start form #3 -->
+<div  class="" *ngIf="step3">
+<form #f="ngForm" [formGroup]="billingForm" (ngSubmit)="onFormSubmitBilling()" autocomplete="off" role="form"  class="j-forms" novalidate>
+
+<div class="content">
+
+  <div class="divider-text gap-top-20 gap-bottom-45">
+    <span>Billing Details</span>
+  </div>
+<div class="j-row">
+ <div class="span8 unit">
+  <div class="j-row">
+    <div class="span6 unit">
+        <div class="input">
+            <input type="text" placeholder="first name" formControlName = "first_name">
+            <div *ngIf="f.submitted || (first_name.invalid && first_name.touched)" class="col-sm-12 text-danger validation-error">
+                  <div *ngIf = "first_name.errors?.required">
+                     First name field can't be blank
+                 </div>
+                 
+            </div>
+    </div>
+    </div>
+    <div class="span6 unit">
+        <div class="input">
+            <input type="text" placeholder="last name" formControlName = "last_name">
+            <div *ngIf="f.submitted || (last_name.invalid && last_name.touched)" class="col-sm-12 text-danger validation-error">
+                  <div *ngIf = "last_name.errors?.required">
+                     Last name field can't be blank
+                 </div>                               
+            </div>
+        </div>
+    </div>
+</div>
+<!-- STREET ADDRESS AND ZIP CODE -->
+
+<div class="j-row">
+  <div class="span6 unit">
+      <div class="input">
+          <input type="text" placeholder="Street address" formControlName = "street_address">
+          <div *ngIf="f.submitted || (street_address.invalid && street_address.touched)" class="col-sm-12 text-danger validation-error">
+                <div *ngIf = "street_address.errors?.required">
+                  Street address field can't be blank
+               </div>
+               
+          </div>
+  </div>
+  </div>
+  <div class="span6 unit">
+      <div class="input">
+          <input type="text" placeholder="ZIP" formControlName = "zip">
+          <div *ngIf="f.submitted || (zip.invalid && zip.touched)" class="col-sm-12 text-danger validation-error">
+                <div *ngIf = "zip.errors?.required">
+                   ZIP field can't be blank
+               </div>                               
+          </div>
+      </div>
+  </div>
+</div>
+<!-- CITY AND COUNTRY -->
+<div class="j-row">
+  <div class="span6 unit">
+      <div class="input">
+          <input type="text" placeholder="City" formControlName = "city">
+          <div *ngIf="f.submitted || (city.invalid && city.touched)" class="col-sm-12 text-danger validation-error">
+                <div *ngIf = "city.errors?.required">
+                  City field can't be blank
+               </div>
+               
+          </div>
+  </div>
+  </div>
+  <div class="span6 unit">
+      <div class="input">
+          <input type="text" placeholder="Country" formControlName = "country">
+          <div *ngIf="f.submitted || (country.invalid && country.touched)" class="col-sm-12 text-danger validation-error">
+                <div *ngIf = "country.errors?.required">
+                  Country field can't be blank
+               </div>                               
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- start password -->
+<div class="j-row">
+    <div class="span6 unit">
+        <div class="input">
+            
+            <input type="text"  formControlName = "state" placeholder="State">
+                   <!-- mobileNo error block -->
+                  <div *ngIf="f.submitted || (state.invalid && state.touched)" class="col-sm-12 text-danger validation-error">
+                   <div *ngIf = "state.errors?.required">
+                    State number field can't be blank
+                  </div>
+                  <!--<div *ngIf = "mobileNo.errors?.pattern">
+                  The Mobile number doesn't seem right
+                  </div>-->
+              </div>
+          </div>
+    </div>
+    <div class="span6 unit">
+      <div class="input">
+          
+          <input type="text"  formControlName = "phone" placeholder="Enter your mobile number">
+                 <!-- mobileNo error block -->
+                <div *ngIf="f.submitted || (phone.invalid && phone.touched)" class="col-sm-12 text-danger validation-error">
+                 <div *ngIf = "phone.errors?.required">
+                    Mobile number field can't be blank
+                </div>
+                <!--<div *ngIf = "mobileNo.errors?.pattern">
+                The Mobile number doesn't seem right
+                </div>-->
+            </div>
+        </div>
+  </div>
+</div>
+<!-- end confirm password -->
+<div class="divider gap-bottom-25"></div>
+
+<!-- start name -->
+<h3>Payment method:</h3>
+
+<div class="j-row">
+  <div class="span6 unit">
+      
+          <label class="checkbox">
+            <input formControlName="payment_method" value="1" checked="" type="radio">
+            <i></i>
+            <h4 *ngIf="paypalLoad">Paypal button is loading</h4>    
+            <div id="paypal-checkout-btn"></div>  
+          </label>
+          
+        
+  </div>
+</div> 
+
+<div class="j-row">
+    <div class="span6 unit">
+        
+            <label class="checkbox">
+              <input formControlName="payment_method"  value="2"  type="radio">
+              <i></i>
+              Free order - payment not necessary.
+            </label>
+          
+    </div>
+  </div> 
+<!-- end name -->
+<!-- start keep logged -->
+
+<div class="unit padding-bottom-18">
+  
+          <button type="submit" class="primary-btn">SUBMIT ORDER</button>
+</div>
+</div>
+
+<!-- Order Summary -->
+
+    <div class="span4 unit">
+     <h3>Order Summary</h3>
+
+     <div class="j-row">
+      <div class="span12 unit">
+        <table class="table">
+          <tr>
+            <th>Title/File Name</th>
+            <th>Cost</th>
+          </tr>
+          <tr *ngFor="let item of orderFiles; let index = index">
+            <td>{{item.file_name}}</td>
+            <td>{{item.cost | currency}}</td>
+          </tr>
+          <tr>
+            <td>Total</td>
+              <td>{{order_tot_cost | currency}}</td>
+            </tr>
+        </table>
+
+      </div>
+    </div>
+</div>  
+</div>
+</div>
+<!-- end /.content -->
+</form>
+
+</div>
+<!-- end form #3 -->
+
+</div>
+</div>
+</section> <!-- contact-section -->

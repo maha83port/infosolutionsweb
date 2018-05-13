@@ -1,0 +1,95 @@
+<section class="">
+    <div class="container text-center">
+        <h2 class="title">Login / Register</h2>
+        <span class="sub-title">Home > Login / Register</span>
+    </div>
+</section><!-- header-title -->
+<section class="contact-section section-padding20">
+    <div class="wrapper wrapper-500 gap-top-50">
+<div class="j-tabs-container">
+   
+
+    <!-- start form #1 -->
+    <div class="">
+        <form #f="ngForm" [formGroup]="signupForm" (ngSubmit)="onFormSubmit()" autocomplete="off" role="form"  class="j-forms" novalidate>
+
+            <div class="content">
+
+                <div class="j-row">
+
+                    <div class="span12">
+
+                        <div class="divider-text gap-top-20 gap-bottom-45">
+                           <span>Login</span>
+                        </div>
+
+                        <!-- start login -->
+                        <div class="unit">
+                            <div class="input">
+                                <label class="icon-right" for="login">
+                                    <i class="fa fa-user"></i>
+                                </label>
+                                <input type="text" formControlName = "email" placeholder="Your Email Id">
+                                <!-- Email error block -->
+                                <div *ngIf="f.submitted || (email.invalid && email.touched)" class="col-sm-12 text-danger validation-error">
+                                    <div *ngIf = "email.errors?.required">
+                                    Email field can't be blank
+                                    </div>
+                                    <div *ngIf = "email.errors?.pattern">
+                                    The email id doesn't seem right
+                                    </div>  
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end login -->
+
+                        <!-- start password -->
+                        <div class="unit">
+                            <div class="input">
+                                <label class="icon-right" for="password">
+                                    <i class="fa fa-lock"></i>
+                                </label>
+                                <input type="password" formControlName = "password"  placeholder="Your password">
+                             <!-- Password error block -->
+                            <div *ngIf="f.submitted || (password.invalid && password.touched)" class="col-sm-12 text-danger validation-error">
+                                    <div *ngIf = "password.errors?.required">
+                                        Password field can't be blank
+                                    </div>
+                                    <div *ngIf = "password.hasError('minlength')"> 
+                                        Password needs to be more than 8 characters
+                                    </div>   
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end password -->
+
+                        <!-- start keep logged -->
+                        <div class="unit padding-bottom-18">
+                            
+                                <span class="hint pull-left">
+                                  <a class="link" routerLink="/register">First time users please click here to register</a>
+                                </span>
+                                <span class="hint pull-right">
+                                  <a class="link" routerLink="/forgot-password">Forgot password?</a>
+                                </span>
+                              
+                        </div>
+                        <!-- end keep logged -->
+
+                    </div>
+                    <!-- end /.span6 -->
+                </div>
+                <!-- end /.j-row -->
+
+                <button type="submit" class="primary-btn">Sign in</button>
+
+            </div>
+            <!-- end /.content -->
+
+        </form>
+    </div>
+    <!-- end form #1 -->
+
+</div>
+</div>
+</section> <!-- contact-section -->
