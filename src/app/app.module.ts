@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 
 import { HttpModule } from '@angular/http';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, NavigationEnd} from '@angular/router';
 import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import 'rxjs/Rx';
 import { FileUploadService } from './file-upload.service';

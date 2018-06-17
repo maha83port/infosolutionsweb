@@ -20,21 +20,11 @@ export class AppComponent implements OnInit {
     
   }
   ngOnInit() {
-    this.location.subscribe((ev:PopStateEvent) => {
-      this.lastPoppedUrl = ev.url;
-  });
-  this.router.events.subscribe((ev:any) => {
-      if (ev instanceof NavigationStart) {
-          if (ev.url != this.lastPoppedUrl)
-              this.yScrollStack.push(window.scrollY);
-      } else if (ev instanceof NavigationEnd) {
-          if (ev.url == this.lastPoppedUrl) {
-              this.lastPoppedUrl = undefined;
-              window.scrollTo(0, this.yScrollStack.pop());
-          } else
-              window.scrollTo(0, 0);
-      }
-  });
+    this.router.events
+    .filter(event => event instanceof NavigationEnd)
+    .subscribe((event: NavigationEnd) => {
+      window.scroll(0, 0);
+    }); 
    
     console.log('app' + this.router.url);
     this.urlvalue = '/';

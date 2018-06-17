@@ -15,34 +15,85 @@
                           <h4>Enterprise or Business Account</h4>
                           <p>Do you have regular need to transcribe your audio/video to text? And require a customized services which fits into your organization process? can help you setup a dedicated/customized account for your organization with the following benefit:</p>
 
-                          <form class="contact-form">
+                          <form #f="ngForm" [formGroup]="freeQuoteForm" (ngSubmit)="onFormSubmit()" autocomplete="off" role="form"  class="contact-form" novalidate>
                               <div class="row">
                                   <div class="col-sm-6 padding-right">
                                       <div class="form-group">
-                                          <input id="name" name="name" type="text" class="form-control" required placeholder="Full Name">
+                                          <input  name="full_name" formControlName = "full_name" type="text" class="form-control" required placeholder="Full Name">
                                       </div>
+                                      <div *ngIf="f.submitted || (full_name.invalid && full_name.touched)" class="col-sm-12 text-danger validation-error">
+                                        <div *ngIf = "full_name.errors?.required">
+                                        Full name field can't be blank
+                                        </div>                                        
+                                     </div>
                                   </div>
 
                                   <div class="col-sm-6 padding-left">
                                       <div class="form-group">
-                                          <input class="form-control" id="email" name="email" type="email" required placeholder="Email">
+                                          <input class="form-control"  formControlName = "email" name="email" type="email" required placeholder="Email">
                                       </div>
+                                      <div *ngIf="f.submitted || (email.invalid && email.touched)" class="col-sm-12 text-danger validation-error">
+                                        <div *ngIf = "email.errors?.required">
+                                        Email field can't be blank
+                                        </div>
+                                        <div *ngIf = "email.errors?.pattern">
+                                        The email id doesn't seem right
+                                        </div>  
+                                    </div>
                                   </div>
 
-                                  <div class="col-sm-12">
-                                      <div class="selection">
-                                          <select name="one" class="dropdown-select">
-                                              <option value="">Select Service</option>
-                                              <option value="1">Service one</option>
-                                              <option value="2">Service two</option>
-                                              <option value="3">Service three</option>
-                                          </select>
-                                      </div>
-                                  </div>
+                                <div class="col-sm-6 padding-right">
+                                    <div class="form-group">
+                                        <input  name="company" formControlName = "company" type="text" class="form-control" required placeholder="Company">
+                                    </div>
+                                    <div *ngIf="f.submitted || (company.invalid && company.touched)" class="col-sm-12 text-danger validation-error">
+                                        <div *ngIf = "company.errors?.required">
+                                        Company field can't be blank
+                                        </div>                                        
+                                     </div>
+                                </div>
+
+                                <div class="col-sm-6 padding-left">
+                                    <div class="form-group">
+                                        <input class="form-control"  formControlName = "phone_number" name="phone_number" type="text" required placeholder="Phone Number">
+                                    </div>
+                                    <div *ngIf="f.submitted || (phone_number.invalid && phone_number.touched)" class="col-sm-12 text-danger validation-error">
+                                        <div *ngIf = "phone_number.errors?.required">
+                                        Phone number field can't be blank
+                                        </div>                                        
+                                     </div>
+                                </div>
+
+                                <div class="col-sm-6 padding-right">
+                                    <div class="form-group">
+                                        <input  name="volume" type="text" formControlName = "volume" class="form-control" required placeholder="Volume (Hours)">
+                                    </div>
+                                    <div *ngIf="f.submitted || (volume.invalid && volume.touched)" class="col-sm-12 text-danger validation-error">
+                                        <div *ngIf = "volume.errors?.required">
+                                            Volume field can't be blank
+                                        </div>                                        
+                                     </div>
+                                </div>
+
+                                <div class="col-sm-6 padding-left">
+                                    <div class="selection">
+                                        <select  formControlName = "frequency" name="frequency" class="dropdown-select">
+                                            <option value="">Select Frequency</option>
+                                            <option value="Daily">Daily</option>
+                                            <option value="Weekly">Weekly</option>
+                                            <option value="Bi-Weekly">Bi-Weekly</option>
+                                            <option value="Monthly">Monthly</option>
+                                            <option value="One-Time Only">One-Time Only</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                 
                               </div>
 
                               <div class="form-group">
-                                  <textarea id="message" name="message" class="form-control form-message" rows="4" required placeholder="What is your business about"></textarea>
+                                  <textarea  name="other_needs" formControlName = "other_needs" class="form-control form-message" rows="4" required placeholder="Other Needs:
+                                  "></textarea>
                               </div>
 
                               <div class="form-group text-center">

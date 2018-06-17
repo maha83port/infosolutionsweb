@@ -57,5 +57,8 @@ export class ApiService {
   getUserPurchase(user){
     return this.http.post(this.appURL + 'getUserPurchase', JSON.stringify({ currUser: user }));
   }
+  saveFreeQuote(freeQuote){
+    return this.http.post(this.appURL + 'saveFreeQuote', JSON.stringify({ freeQuote: freeQuote }));
+  }
 
 }
