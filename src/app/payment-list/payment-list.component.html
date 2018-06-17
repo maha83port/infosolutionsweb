@@ -1,0 +1,161 @@
+<section class="">
+  <div class="container text-center">
+      <h2 class="title">Login / Register</h2>
+      <span class="sub-title">Home > Login / Register</span>
+  </div>
+</section> <!-- header-title -->
+<section class="contact-section section-padding20">
+  <div class="wrapper container gap-top-50">
+
+    <div class="j-tabs-container">
+
+
+
+<!-- start form #1 -->
+<div  class="" >
+  <form #f="ngForm"  (ngSubmit)="onFormSubmitPay()" autocomplete="off" role="form"  class="j-forms">
+
+<div class="content">
+
+  <div class="j-row">
+
+    <div class="span12">
+
+  <!-- start form #3 -->
+
+
+<div class="content">
+
+<div class="divider-text gap-top-20 gap-bottom-45">
+  <span>Payment Details</span>
+</div>
+<div class="j-row">
+<div class="span8 unit">
+<div class="j-row">
+  <div class="span6 unit">
+First Name : {{firstName}}
+  </div>
+  <div class="span6 unit">
+Last Name : {{lastName}}
+  </div>
+</div>
+<!-- STREET ADDRESS AND ZIP CODE -->
+
+<div class="j-row">
+<div class="span6 unit">  
+Address : {{sAddress}}  
+</div>
+<div class="span6 unit">
+Zip Code : {{zipcode}}
+</div>
+</div>
+<!-- CITY AND COUNTRY -->
+<div class="j-row">
+<div class="span6 unit">
+City : {{city}}
+</div>
+<div class="span6 unit">
+Country : {{country}}
+
+</div>
+</div>
+
+<!-- start password -->
+<div class="j-row">
+  <div class="span6 unit">
+State : {{state}}               
+  </div>
+  <div class="span6 unit">
+Mobile Number : {{phone}}
+
+</div>
+</div>
+<!-- end confirm password -->
+<div class="divider gap-bottom-25"></div>
+
+<!-- start name -->
+<h3>Payment method:</h3>
+
+<div class="j-row">
+<div class="span6 unit">
+    
+        <label class="checkbox">
+          <input formControlName="payment_method" value="1" checked="" type="radio">
+          <i></i>
+          <h4 *ngIf="paypalLoad">Paypal button is loading</h4>    
+          <div id="paypal-checkout-btn"></div>  
+        </label>
+        
+      
+</div>
+</div> 
+
+<div class="j-row">
+  <div class="span6 unit">
+      
+          <label class="checkbox">
+            <input formControlName="payment_method"  value="2"  type="radio">
+            <i></i>
+            Free order - payment not necessary.
+          </label>
+        
+  </div>
+</div> 
+<!-- end name -->
+<!-- start keep logged -->
+
+<div class="unit padding-bottom-18">
+
+        <button type="submit" class="primary-btn">SUBMIT ORDER</button>
+</div>
+</div>
+
+<!-- Order Summary -->
+  <div class="span4 unit">
+   <h3>Order Summary</h3>
+
+   <div class="j-row">
+    <div class="span12 unit">
+      <table class="table">
+        <tr>
+          <th>Title/File Name</th>
+          <th>Cost</th>
+        </tr>
+        <tr *ngFor="let item of orderFiles; let index = index">
+          <td>{{item.file_name}}</td>
+          <td>{{item.cost | currency}}</td>
+        </tr>
+        <tr>
+          <td>Total</td>
+            <td>{{order_tot_cost | currency}}</td>
+          </tr>
+      </table>
+
+    </div>
+  </div>
+</div>  
+
+</div>
+</div>
+<!-- end /.content -->
+      
+
+    </div>
+    <!-- end /.span6 -->
+  </div>
+  <!-- end /.j-row -->
+
+  
+
+</div>
+<!-- end /.content -->
+
+</form>
+</div>
+<!-- end form #1 -->
+
+
+
+</div>
+</div>
+</section> <!-- contact-section -->

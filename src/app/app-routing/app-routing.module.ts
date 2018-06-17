@@ -25,6 +25,7 @@ import { ResetPasswordComponent } from '../reset-password/reset-password.compone
 import { TranscriptionFileComponent } from '../transcription-file/transcription-file.component';
 
 import { UserDashboardComponent } from '../user-dashboard/user-dashboard.component';
+import { PaymentListComponent } from '../payment-list/payment-list.component';
 
 
 const routes: Routes = [
@@ -48,6 +49,7 @@ const routes: Routes = [
   { path: 'reset-password/:id', component: ResetPasswordComponent, pathMatch: 'full'},
   { path: 'transcription-file/:sid/:sname', component: TranscriptionFileComponent, pathMatch: 'full'},
   { path: 'user-dashboard', component: UserDashboardComponent, canActivate: [AuthGuard]},
+  { path: 'payment-list', component: PaymentListComponent, canActivate: [AuthGuard]},
   
   
 ];

@@ -51,8 +51,13 @@ export class ApiService {
   billing(billing, user){
     return this.http.post(this.appURL + 'saveBilling', JSON.stringify({ billing: billing, currUser: user }));
   }
-  getOrderList(user){
-    return this.http.post(this.appURL + 'getOrderList', JSON.stringify({ currUser: user }));
+  saveOrderData(user,session_id)
+  {
+    return this.http.post(this.appURL + 'saveOrderData', JSON.stringify({ currUser: user,session_id: session_id }));
+  }
+  getOrderList(user,session_id){
+    console.log(session_id);
+    return this.http.post(this.appURL + 'getOrderList', JSON.stringify({ currUser: user,session_id: session_id }));
   }
   getUserPurchase(user){
     return this.http.post(this.appURL + 'getUserPurchase', JSON.stringify({ currUser: user }));

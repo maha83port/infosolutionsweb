@@ -40,6 +40,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { TranscriptionFileComponent } from './transcription-file/transcription-file.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { PaymentListComponent } from './payment-list/payment-list.component';
 
 
 @NgModule({
@@ -66,7 +67,8 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
     ForgotPasswordComponent,
     ResetPasswordComponent,
     TranscriptionFileComponent,
-    UserDashboardComponent
+    UserDashboardComponent,
+    PaymentListComponent
   ],
   imports: [
     BrowserModule,

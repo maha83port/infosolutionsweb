@@ -162,9 +162,8 @@ export class TranscriptionFileComponent implements OnInit {
             this.billingForm.patchValue({purchase_order_id: data['purchase_order_id']}); 
             //WRITE CODE FOR PAYMENT GETWAY
             this._flashMessagesService.show(data['message'], { cssClass: 'alert-success' }); 
-            //this.ApiService.setLocalSession(this.guid(), 'current_session_id');         
-           // this.router.navigate(['user-dashboard']);
-            this.router.navigate(['payment-list']);
+            this.ApiService.setLocalSession(this.guid(), 'current_session_id');         
+            this.router.navigate(['user-dashboard']);
             
           } else {
             this._flashMessagesService.show(data['message'], { cssClass: 'alert-danger' });
@@ -199,8 +198,7 @@ export class TranscriptionFileComponent implements OnInit {
   }
   //getOrderList
   getOrderList(){
-    this.session_id = this.ApiService.getLocalSession('current_session_id');
-    this.ApiService.getOrderList(JSON.parse(this.ApiService.getLocalSession('currentUser')),this.session_id)
+    this.ApiService.getOrderList(JSON.parse(this.ApiService.getLocalSession('currentUser')))
     .subscribe(
     data => {
       console.log(data['files']);
