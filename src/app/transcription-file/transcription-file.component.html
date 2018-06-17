@@ -11,7 +11,7 @@
 
 <!-- start tab #1 (click)="AddFiles()" -->
 
-<label class="j-tabs-label" for="tab1"  title="Add Files">
+<label class="j-tabs-label" for="tab1"  (click)="AddFiles()" title="Add Files">
 <span> Step 1 <br/> Add Files</span>
 </label>
 <!-- end tab #1 -->
@@ -28,7 +28,7 @@
 <!--<label class="j-tabs-label" for="tab3"  title="Billing Details">
 <span>Step 2 <br/> Billing Details</span>
 </label>-->
-<button class="j-tabs-label" for="tab3" (click)="BillingDetails()" title="Billing Details" [disabled]="currentUser"><span>Step 3 <br/> Billing Details</span></button>
+<button class="j-tabs-label" for="tab3" (click)="BillingDetails()" title="Billing Details" [disabled]="currentUser"><span>Step 2 <br/> Billing Details</span></button>
 <!-- end tab #3 -->
 
 <!-- start form #1 -->
@@ -378,14 +378,17 @@
           <tr>
             <th>Title/File Name</th>
             <th>Cost</th>
+            <th>Action</th>
           </tr>
           <tr *ngFor="let item of orderFiles; let index = index">
             <td>{{item.file_name}}</td>
             <td>{{item.cost | currency}}</td>
+            <td><a (click)="orderDelete(item.order_id, index)">Delete</a></td>
           </tr>
           <tr>
             <td>Total</td>
-              <td>{{order_tot_cost | currency}}</td>
+            <td>{{order_tot_cost | currency}}</td>
+            <td></td>
             </tr>
         </table>
 

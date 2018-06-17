@@ -42,6 +42,9 @@ export class ApiService {
   deleteFilesList(id){
     return this.http.post(this.appURL + 'deleteFilesList', JSON.stringify({ id: id }));
   }
+  deleteOrderFilesList(id){
+    return this.http.post(this.appURL + 'deleteOrderFilesList', JSON.stringify({ id: id }));
+  }
   updateFilesList(e, options, id, service_id){
     return this.http.post(this.appURL + 'updateFilesList', JSON.stringify({ e: e, options:options, id:id, service_id: service_id }));
   }

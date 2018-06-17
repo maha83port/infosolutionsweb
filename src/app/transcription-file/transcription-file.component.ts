@@ -145,10 +145,7 @@ export class TranscriptionFileComponent implements OnInit {
 
   // FORM SUBMIT FOR BILLING DETAILS
   public onFormSubmitBilling() {
-    if(this.billingForm.valid) {  
-      
-      
-
+    if(this.billingForm.valid) {    
       
         this.billing = this.billingForm.value;
         console.log(this.billing);
@@ -261,6 +258,25 @@ export class TranscriptionFileComponent implements OnInit {
     error => {
       this._flashMessagesService.show('Error in the Data/Server', { cssClass: 'alert-danger' });
     });
+  }
+
+orderDelete(id, index){
+
+    this.ApiService.deleteOrderFilesList(id)
+    .subscribe(
+    data => {
+      if(data['status'] == 1){       
+        this._flashMessagesService.show(data['message'], { cssClass: 'alert-success' });  
+        this.orderFiles.splice(index, 1);
+        this.getOrderList();
+      }else{
+        this._flashMessagesService.show('Error in the Data/Server', { cssClass: 'alert-danger' });
+      }
+    },
+    error => {
+      this._flashMessagesService.show('Error in the Data/Server', { cssClass: 'alert-danger' });
+    });
+
   }
   guid() {
 
