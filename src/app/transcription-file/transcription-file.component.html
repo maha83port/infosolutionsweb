@@ -47,24 +47,28 @@
       </div>
  
       <!-- start login -->
+
       <div class="j-row">
+          
       <div class="span6 unit">      
       <div class="unit">
           <div class="input">
-            <input type="text"  name="title" placeholder="Title" />
+            <input type="text"  name="title" [(ngModel)]="disc.title" #title="ngModel" placeholder="Title" />
           </div>
         </div>
       
       <!-- start keep logged -->
       <div class="unit">
         <div class="input">
-            <textarea placeholder="You can include any notes which needs to be passed onto the transcribers. You may want to include the title of your podcast, useful websites, unusual words, keywords and acronyms, and the names of the speakers." name="description"></textarea>
-        </div>
+            <textarea  [(ngModel)]="disc.description" #description="ngModel" placeholder="You can include any notes which needs to be passed onto the transcribers. You may want to include the title of your podcast, useful websites, unusual words, keywords and acronyms, and the names of the speakers." name="description"></textarea>
+           <input type="hidden" name="id" [(ngModel)] = "disc.id" />
+          </div>
         
       </div>
-      <!-- end keep logged -->
-      
+      <!-- end keep logged -->    
       </div>
+    
+    
       <!-- end login -->
 
       <!-- start password -->

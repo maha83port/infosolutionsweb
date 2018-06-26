@@ -36,6 +36,7 @@ export class TranscriptionFileComponent implements OnInit {
   order_tot_cost: number;
   billing: any = {};
   address: any = {};
+  disc: any = {};
 
   readonly STATUS_INITIAL = 0;
   readonly STATUS_SAVING = 1;
@@ -43,8 +44,10 @@ export class TranscriptionFileComponent implements OnInit {
   readonly STATUS_FAILED = 3;
   
 
-  billingForm: FormGroup; 
+  billingForm: FormGroup;
+ 
   private user:Billing;
+
 
   constructor(private _svc: FileUploadService,private fb:FormBuilder, private router: Router, private route: ActivatedRoute, private ApiService: ApiService,
     private _flashMessagesService: FlashMessagesService, private _location: Location) {
@@ -83,7 +86,6 @@ export class TranscriptionFileComponent implements OnInit {
 
   ngOnInit() {
     
-
     this.route.params.subscribe(params => {
       this.sid = params.sid;
       this.sname = params.sname;
@@ -123,14 +125,10 @@ export class TranscriptionFileComponent implements OnInit {
       payment_method: [''],
       session_id:[''],
           
-     })
-    
-     
-
+     });
 
   }
-  
-  
+    
   // VALIDATION FOR BILLING DETAILS
   get street_address() { return this.billingForm.get('street_address'); }  
   get phone() { return this.billingForm.get('phone'); }
@@ -140,8 +138,6 @@ export class TranscriptionFileComponent implements OnInit {
   get zip() { return this.billingForm.get('zip'); }
   get state() { return this.billingForm.get('state'); }
   get country() { return this.billingForm.get('country'); }
-  
- 
 
   // FORM SUBMIT FOR BILLING DETAILS
   public onFormSubmitBilling() {
@@ -181,6 +177,9 @@ export class TranscriptionFileComponent implements OnInit {
       this.uploadedFiles = data['files'];
       this.tot_duration = data['tot_duration'];
       this.tot_cost     = data['tot_cost'];
+      if(data['disc'] != null){
+        this.disc         = data['disc'];
+      }
       /*for (let entry of data['files']) {
         /*this.uploadedFiles.push({'upload_name': entry['upload_name'],
         'id': entry['id'],
@@ -407,15 +406,16 @@ checkout(fileList){
     this._flashMessagesService.show('Login first and then checkout', { cssClass: 'alert-danger' });
     this.router.navigate(['login']);
   }else{
-    console.log(fileList);
+    console.log(this.disc);
      
-    this.ApiService.saveOrderList(fileList,JSON.parse(this.ApiService.getLocalSession('currentUser')))
+    this.ApiService.saveOrderList(fileList, JSON.parse(this.ApiService.getLocalSession('currentUser')), this.disc)
     .subscribe(
     data => {
       if(data['status'] == 1){       
         this._flashMessagesService.show(data['message'], { cssClass: 'alert-success' });  
         this.getFileList();
         this.BillingDetails();
+        this.disc.id = data['desc_id'];
       }else{
         this._flashMessagesService.show('Error in the Data/Server', { cssClass: 'alert-danger' });
       }

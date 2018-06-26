@@ -51,7 +51,7 @@ export class GetFreeQuoteComponent implements OnInit {
           console.log(data);
           if (data['status'] === 'success') {  
             
-            this._flashMessagesService.show('Logged in Successfully', { cssClass: 'alert-success' });                    
+            this._flashMessagesService.show('Your Quote sent Successfully', { cssClass: 'alert-success' });                    
        
           } else {
             this._flashMessagesService.show(data['message'], { cssClass: 'alert-danger' });

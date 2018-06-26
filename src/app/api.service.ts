@@ -48,15 +48,15 @@ export class ApiService {
   updateFilesList(e, options, id, service_id){
     return this.http.post(this.appURL + 'updateFilesList', JSON.stringify({ e: e, options:options, id:id, service_id: service_id }));
   }
-  saveOrderList(fileList, currUser){
-    return this.http.post(this.appURL + 'saveOrderList', JSON.stringify({ fileList: fileList, currUser : currUser }));
+  saveOrderList(fileList, currUser, disc){
+    return this.http.post(this.appURL + 'saveOrderList', JSON.stringify({ fileList: fileList, currUser : currUser, disc: disc }));
   }
   billing(billing, user){
     return this.http.post(this.appURL + 'saveBilling', JSON.stringify({ billing: billing, currUser: user }));
   }
   saveOrderData(user,session_id)
   {
-    return this.http.post(this.appURL + 'saveOrderData', JSON.stringify({ currUser: user,session_id: session_id }));
+    return this.http.post(this.appURL + 'saveOrderData', JSON.stringify({ currUser: user,session_id: session_id}));
   }
   getOrderList(user,session_id){
     console.log(session_id);

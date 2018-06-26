@@ -88,8 +88,8 @@ export class AppComponent implements OnInit {
   }
 
   public logout(){    
-        localStorage.removeItem('currentUser');
-        //localStorage.removeItem('current_session_id');        
+        localStorage.removeItem('currentUser');        
+        localStorage.removeItem('current_session_id');        
         this.router.navigateByUrl('/index');       
     
   }
