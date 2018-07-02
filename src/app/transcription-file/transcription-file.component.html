@@ -135,12 +135,14 @@
             <td>{{index + 1}}</td>
             <td style="width:40%">{{item.upload_name}}</td>
             <td style="width:30%"><div class="unit">
-              <div class="input">
+              
+              <div class="input" >
                 <select #service_id="ngModel" name="service_id{{index}}" [(ngModel)]= "item.service_id" #input (change)="calculateCost($event.target.value, 'service_id', item.id, item.service_id)">
                   <option *ngFor="let ser of services.services" [value]="ser.service_id">{{ser.service_name}}</option>
                   
               </select>
               </div>
+              <div *ngIf="item.service_name != 'translation'">
               <label class="checkbox">
                 <input type="checkbox" [checked]="item.timestamps" (change)="calculateCost(item.timestamps, 'timestamps', item.id, item.service_id)" #timestamps="ngModel" name="timestamps{{index}}"  [(ngModel)]= "item.timestamps">
                 <i></i>
@@ -151,11 +153,28 @@
                 <i></i>
                 This audio is difficult ($0.75/m)
               </label>
+              </div>
+              <div class="selection" *ngIf="item.service_name == 'translation'">
+                  <select class="dropdown-select" #lang_form_id="ngModel" name="lang_form_id{{index}}" [(ngModel)]= "item.translate_from_id" #input (change)="updateLang(item.id, item.translate_from_id, 'translate_from_id')" >
+                    <option *ngIf="item.translate_from_id == null"  [value]="null">--Select Translate From{{item.translate_from_id}}--</option> 
+                    <option *ngFor="let lang_from of services.languages" [value]="lang_from.lang_id">{{lang_from.lang_name}}</option>
+                     
+                  </select>
+                  <select #lang_to_id="ngModel" name="lang_id{{index}}" [(ngModel)]= "item.translate_to_id" #input (change)="updateLang(item.id, item.translate_to_id, 'translate_to_id')" >
+                    <option *ngIf="item.translate_to_id == null" [value]="null">--Select Translate To--</option>
+                     
+                    <option *ngFor="let lang_to of services.languages" [value]="lang_to.lang_id">{{lang_to.lang_name}}</option>
+                      
+                  </select>
+              </div>
               <p>Est. Delivery Date(PST): {{item.ext_date}}</p>
             </div></td>
-            <td style="width:10%"><input type="text" name="duration{{index}}" #input (blur)="calculateCost($event.target.value, 'duration', item.id, item.service_id)"  #duration="ngModel" [(ngModel)]= "item.duration" class="form-control"/></td>
-            <td style="width:10%">{{item.cost | currency }}</td>
-            <td style="width:10%"><a (click)="fileDelete(item.id, index)" >Delete</a></td>
+            <td style="width:20%"><input type="text" name="duration{{index}}" #input (blur)="calculateCost($event.target.value, 'duration', item.id, item.service_id)"  #duration="ngModel" [(ngModel)]= "item.duration" class="form-control"/>
+              <div *ngIf = "item.duration == 1" style="color:brown">
+              Update duration
+            </div></td>
+            <td style="width:5%">{{item.cost | currency }}</td>
+            <td style="width:5%"><a (click)="fileDelete(item.id, index)" >Delete</a></td>
           </tr>
           <tr>
             <td colspan="3">TOTAL</td>

@@ -9,9 +9,9 @@ export class FileUploadService {
     private baseUrl: string = environment.apiUrl;
     constructor(private _http: HttpClient) { }
 
-    upload(formData, session_id, service_id) {
+    upload(formData, session_id, service_id, service_name) {
        console.log(formData);
-        const url = `${this.baseUrl}fileupload?session_id=`+session_id+`&service_id=`+service_id;
+        const url = `${this.baseUrl}fileupload?session_id=`+session_id+`&service_id=`+service_id+`&service_name=`+service_name;
         return this._http.post(url, formData);
             
     }

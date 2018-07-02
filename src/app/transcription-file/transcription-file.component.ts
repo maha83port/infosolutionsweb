@@ -91,7 +91,7 @@ export class TranscriptionFileComponent implements OnInit {
       this.sname = params.sname;
 
     });
-
+    
     this.step1 = true;
     this.step2 = false;
     this.step3 = false;
@@ -352,7 +352,7 @@ orderDelete(id, index){
     this.currentStatus = this.STATUS_SAVING;
     // console.log(formData);
     
-    this._svc.upload(formData, session_id, service_id)
+    this._svc.upload(formData, session_id, service_id, this.sname)
       .take(1)
       .delay(1500) // DEV ONLY: delay 1.5s to see the changes
       .subscribe(x => {
@@ -401,7 +401,29 @@ calculateCost(e, options, id, service_id){
    this._flashMessagesService.show('Error in the Data/Server', { cssClass: 'alert-danger' });
  });
 }
+updateLang(id, lang_id, option ){
+  this.ApiService.updateLang(id, lang_id, option)
+  .subscribe(
+  data => {
+    if(data['status'] == 1){       
+      this._flashMessagesService.show(data['message'], { cssClass: 'alert-success' });  
+      this.getFileList();
+    }else{
+      this._flashMessagesService.show('Error in the Data/Server', { cssClass: 'alert-danger' });
+    }
+  },
+  error => {
+    this._flashMessagesService.show('Error in the Data/Server', { cssClass: 'alert-danger' });
+  });
+}
 checkout(fileList){
+  //validation
+  for(let i=0;i< fileList.length; i++){
+    if(fileList[i].duration == 1){
+      this._flashMessagesService.show('Duration should be more than one', { cssClass: 'alert-danger' });
+      return;
+    }
+  }
   if(this.ApiService.getLocalSession('currentUser') === null){
     this._flashMessagesService.show('Login first and then checkout', { cssClass: 'alert-danger' });
     this.router.navigate(['login']);

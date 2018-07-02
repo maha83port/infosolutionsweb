@@ -68,5 +68,8 @@ export class ApiService {
   saveFreeQuote(freeQuote){
     return this.http.post(this.appURL + 'saveFreeQuote', JSON.stringify({ freeQuote: freeQuote }));
   }
+  updateLang(id, lang_id, option){
+    return this.http.post(this.appURL + 'updateLang', JSON.stringify({ id: id, lang_id: lang_id, option: option }));
+  }
 
 }
