@@ -28,13 +28,16 @@ export class PaymentListComponent implements OnInit {
   order_tot_duration: any = {};
   order_tot_cost: any = {};
   currentStatus: number;
-   finalAmount: number = 1;
-   billing: any = {};
-   currentUser:any = {};
-
+  finalAmount: number = 1;
+  billing: any = {};
+  currentUser:any = {};
+  couponcodeshow: boolean = false;
+  coupon: any = {};
+  mode: any = {};   
     //paypal
     addScript: boolean = false;
-    paypalLoad: boolean = true;
+    pay: any = {};
+    paypalLoad: boolean;
 
     billingForm: FormGroup; 
 
@@ -54,13 +57,14 @@ export class PaymentListComponent implements OnInit {
     FlashMessagesService, 
     private _location: Location) {
     this.reset(); // set initial state
+    this.paypalLoad = true;
   }
 
 
   paypalConfig = {
     env: 'sandbox',
     client: {
-      sandbox: 'AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R',
+      sandbox: 'ATMHCin6K_odomNsAt9aF4T9GWQY7Ogx-G1WbCa9moVEsNALj5fVCN7GW8X5M8s2qj5k99OVZuqCaukS',
       production: '<your-production-key-here>'
     },
     commit: true,
@@ -68,7 +72,8 @@ export class PaymentListComponent implements OnInit {
       return actions.payment.create({
         payment: {
           transactions: [
-            { amount: { total: this.finalAmount, currency: 'INR' } }
+            { amount: { total: this.order_tot_cost, currency: 'USD' },
+              custom: '0011' }
           ]
         }
       });
@@ -76,32 +81,46 @@ export class PaymentListComponent implements OnInit {
     onAuthorize: (data, actions) => {
       return actions.payment.execute().then((payment) => {
         //Do something when payment is successful.
-      })
-    }
+        data => {
+          console.log(data);
+          
+        }
+        console.log(data);
+        this.mode.token = data.paymentID;
+        this.mode.payment_mode = 'paypal';
+        this.savePaymentFun(this.mode);              
+               
+      });
+    },
+    onCancel: function(data) {
+      console.log('The payment was cancelled!');
+      this._flashMessagesService.show('The payment was cancelled!', { cssClass: 'alert-danger' });     
+  }
   };
 
   ngOnInit() {
-    this.getOrderList();
-    
+    this.getOrderList();    
     if (!this.addScript) {      
       this.addPaypalScript().then(() => {       
         paypal.Button.render(this.paypalConfig, '#paypal-checkout-btn');
         this.paypalLoad = false;
       })
     }
-   
-  }
 
+    this.billingForm  = this.fb.group({     
+      coupon_code: ['',[Validators.required]]     
+          
+     });
+    
+  }
+  get coupon_code() { return this.billingForm.get('coupon_code'); }  
    //getOrderList
    getOrderList(){
-	  this.session_id = this.ApiService.getLocalSession('current_session_id');
-	  
-	  console.log('test-->'+this.session_id);
-	  
+	  this.session_id = this.ApiService.getLocalSession('current_session_id');	  
+	  console.log('test-->'+this.session_id);	  
     this.ApiService.getOrderList(JSON.parse(this.ApiService.getLocalSession('currentUser')),this.session_id)
     .subscribe(
-    data => {
-      	  
+    data => {      	  
 	  this.address  = data['address'];
 	  this.firstName = this.address['first_name'];
 	  this.lastName = this.address['last_name'];
@@ -110,66 +129,73 @@ export class PaymentListComponent implements OnInit {
 	  this.state = this.address['state'];
 	  this.country = this.address['country'];
 	  this.zipcode = this.address['zip'];
-	  this.phone = this.address['phone'];
-	  //console.log('tett'+data['files']);
-     this.orderFiles = data['files'];
-      this.order_tot_duration = data['tot_duration'];
-      this.order_tot_cost     = data['tot_cost'];
-      /*this.address  = data['address'];
-      //this.billing.sub_total = this.order_tot_cost;
-//this.billingForm.controls['sub_total'].setValue(data['tot_cost']);
-      this.billingForm.patchValue({sub_total: this.order_tot_cost, tax_amt:'2',
-       session_id: data['session_id'],
-       first_name:  this.address['first_name'],
-        last_name: this.address['last_name'],
-        street_address: this.address['street_address'],
-        city:this.address['city'],
-        state: this.address['state'],
-        country: this.address['country'],
-        zip:this.address['zip'],
-        phone: this.address['phone'],
-        payment_method: this.address['payment_method']
-       }); 
-      /*for (let entry of data['files']) {
-        /*this.uploadedFiles.push({'upload_name': entry['upload_name'],
-        'id': entry['id'],
-        'cost' : this.cost,
-        'duration' : 1 });*/
-        //this.uploadedFiles.push({'cost' : this.cost});
-        //this.uploadedFiles = entry;*/
-    //}
+	  this.phone = this.address['phone'];	  
+    this.orderFiles = data;
+    this.order_tot_duration = data['tot_duration'];
+    this.order_tot_cost     = data['tot_cost'];
+      
     },
     error => {
       this._flashMessagesService.show('Error in the Data/Server', { cssClass: 'alert-danger' });
     });
   } 
-
+  public savePaymentFun(mode){
+    this.session_id = this.ApiService.getLocalSession('current_session_id');
+    this.currentUser = this.ApiService.getLocalSession('currentUser')
+      /* Any API call logic via services goes here */
+      this.ApiService.saveOrderData(JSON.parse(this.ApiService.getLocalSession('currentUser')),this.session_id, mode)
+      .subscribe(
+      data => {
+        console.log(data);
+        console.log(data['status']);
+        if (data['status'] == 1) {
+          
+          //this.billingForm.patchValue({purchase_order_id: data['purchase_order_id']}); 
+          //WRITE CODE FOR PAYMENT GETWAY
+          this._flashMessagesService.show(data['message'], { cssClass: 'alert-success' }); 
+          this.ApiService.setLocalSession(this.guid(), 'current_session_id');         
+          this.router.navigate(['user-dashboard']);
+         // this.router.navigate(['payment-list']);
+          
+        } else {
+          this._flashMessagesService.show(data['message'], { cssClass: 'alert-danger' });
+        }
+      },
+      error => {
+        this._flashMessagesService.show('Error in the Data/Server', { cssClass: 'alert-danger' });
+      });
+  }
   public onFormSubmitPay() {
       
-      this.session_id = this.ApiService.getLocalSession('current_session_id');
-      this.currentUser = this.ApiService.getLocalSession('currentUser')
-        /* Any API call logic via services goes here */
-        this.ApiService.saveOrderData(JSON.parse(this.ApiService.getLocalSession('currentUser')),this.session_id)
-        .subscribe(
-        data => {
+    
+    if(!this.couponcodeshow){
+        this.couponcodeshow = true;
+        return;
+     }else{
+      if(this.billingForm.valid) {    
+        
+          this.billing = this.billingForm.value;
+          console.log(this.billing);
+          this.ApiService.checkCouponCode(JSON.parse(this.ApiService.getLocalSession('currentUser')),this.session_id, this.billing)
+          .subscribe(
+          data => {      	  
           console.log(data);
-          console.log(data['status']);
-          if (data['status'] == 1) {
-            
-            //this.billingForm.patchValue({purchase_order_id: data['purchase_order_id']}); 
-            //WRITE CODE FOR PAYMENT GETWAY
-            this._flashMessagesService.show(data['message'], { cssClass: 'alert-success' }); 
-            this.ApiService.setLocalSession(this.guid(), 'current_session_id');         
-            this.router.navigate(['user-dashboard']);
-           // this.router.navigate(['payment-list']);
-            
-          } else {
-            this._flashMessagesService.show(data['message'], { cssClass: 'alert-danger' });
+          if(data['status'] == 'success'){
+            this.mode.token = data['coupon_no'];
+            this.mode.payment_mode = 'free';
+            this.savePaymentFun(this.mode);
+          }else{
+            this._flashMessagesService.show('Coupon code does not exist', { cssClass: 'alert-danger' });
           }
-        },
-        error => {
-          this._flashMessagesService.show('Error in the Data/Server', { cssClass: 'alert-danger' });
-        });
+            
+          },
+          error => {
+            this._flashMessagesService.show('Error in the Data/Server', { cssClass: 'alert-danger' });
+          });
+      }
+     }
+     
+      
   }
 
   reset() {

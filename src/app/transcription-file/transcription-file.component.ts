@@ -7,7 +7,7 @@ import { FormArray } from '@angular/forms/src/model';
 import { ApiService} from './../api.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import {Location} from '@angular/common';
-declare let paypal: any;
+
 @Component({
   selector: 'app-transcription-file',
   templateUrl: './transcription-file.component.html',
@@ -54,36 +54,6 @@ export class TranscriptionFileComponent implements OnInit {
     this.reset(); // set initial state
   }
   
-  //paypal
-  addScript: boolean = false;
-  paypalLoad: boolean = true;
-  
-  finalAmount: number = 1;
- 
-  paypalConfig = {
-    env: 'sandbox',
-    client: {
-      sandbox: 'AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R',
-      production: '<your-production-key-here>'
-    },
-    commit: true,
-    payment: (data, actions) => {
-      return actions.payment.create({
-        payment: {
-          transactions: [
-            { amount: { total: this.finalAmount, currency: 'INR' } }
-          ]
-        }
-      });
-    },
-    onAuthorize: (data, actions) => {
-      return actions.payment.execute().then((payment) => {
-        //Do something when payment is successful.
-      })
-    }
-  };
-  //paypal
-
   ngOnInit() {
     
     this.route.params.subscribe(params => {
@@ -200,7 +170,7 @@ export class TranscriptionFileComponent implements OnInit {
     .subscribe(
     data => {
       console.log(data['files']);
-      this.orderFiles = data['files'];
+      this.orderFiles = data;
       this.order_tot_duration = data['tot_duration'];
       this.order_tot_cost     = data['tot_cost'];
       this.address  = data['address'];
@@ -266,7 +236,7 @@ orderDelete(id, index){
     data => {
       if(data['status'] == 1){       
         this._flashMessagesService.show(data['message'], { cssClass: 'alert-success' });  
-        this.orderFiles.splice(index, 1);
+        this.orderFiles.files.splice(index, 1);
         this.getOrderList();
       }else{
         this._flashMessagesService.show('Error in the Data/Server', { cssClass: 'alert-danger' });
@@ -299,13 +269,7 @@ orderDelete(id, index){
   BillingDetails(){
     this.step1 = false;
     this.step2 = false;
-    this.step3 = true;
-    if (!this.addScript) {      
-      this.addPaypalScript().then(() => {       
-        paypal.Button.render(this.paypalConfig, '#paypal-checkout-btn');
-        this.paypalLoad = false;
-      })
-    }
+    this.step3 = true;    
     this.getOrderList();
   }
   // file upload start
@@ -456,15 +420,6 @@ loginReg(){
   
 }
 
-addPaypalScript() {
-  this.addScript = true;
-  return new Promise((resolve, reject) => {
-    let scripttagElement = document.createElement('script');    
-    scripttagElement.src = 'https://www.paypalobjects.com/api/checkout.js';
-    scripttagElement.onload = resolve;
-    document.body.appendChild(scripttagElement);
-  })
-}
   // End file upload
 
 }

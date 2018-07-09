@@ -31,21 +31,17 @@
             <th>Order Number</th>
             <th>Order Date</th>
             <th>Delivery Date</th>
-            <th>Sub Total</th>
-            <th>Tax Amount</th>
             <th>Total Amount</th>
             <th>Status</th>
           </tr>
           <tr *ngIf="purchaseList.userPurchase?.length <= 0">
-            <td colspan="8"> Not Found!</td>
+            <td colspan="6"> Not Found!</td>
           </tr>
           <tr *ngFor="let item of purchaseList.userPurchase; let index = index" >
               <td>{{index + 1}}</td>
               <td>{{item.revision_number}}</td>
               <td>{{item.orderDate | date }}</td>
-              <td>{{item.shipping_date | date}}</td>
-              <td>{{item.sub_total | currency }}</td>
-              <td>{{item.tax_amt | currency }}</td>
+              <td>{{item.shipping_date | date}}</td>              
               <td>{{item.total_due | currency }}</td>
               <td *ngIf="item.status == 1">Pending</td> 
             </tr>

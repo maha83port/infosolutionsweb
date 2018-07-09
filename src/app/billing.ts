@@ -14,6 +14,7 @@ export class Billing {
     purchase_order_id: number;
     status: number;
     session_id: string;
+    coupon_code: string;
 
  
     constructor(values: Object = {}) {

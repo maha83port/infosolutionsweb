@@ -13,7 +13,7 @@
 
 <!-- start form #1 -->
 <div  class="" >
-  <form #f="ngForm"  (ngSubmit)="onFormSubmitPay()" autocomplete="off" role="form"  class="j-forms">
+  <form #f="ngForm"  [formGroup]="billingForm" (ngSubmit)="onFormSubmitPay()" autocomplete="off" role="form"  class="j-forms">
 
 <div class="content">
 
@@ -79,11 +79,9 @@ Mobile Number : {{phone}}
 <div class="j-row">
 <div class="span6 unit">
     
-        <label class="checkbox">
-          <input formControlName="payment_method" value="1" checked="" type="radio">
-          <i></i>
+        <label class="checkbox">         
           <h4 *ngIf="paypalLoad">Paypal button is loading</h4>    
-          <div id="paypal-checkout-btn"></div>  
+          <div id="paypal-checkout-btn"></div> 
         </label>
         
       
@@ -93,21 +91,31 @@ Mobile Number : {{phone}}
 <div class="j-row">
   <div class="span6 unit">
       
-          <label class="checkbox">
-            <input formControlName="payment_method"  value="2"  type="radio">
-            <i></i>
-            Free order - payment not necessary.
+         <div *ngIf="couponcodeshow">
+          <input type="text"  formControlName = "coupon_code" placeholder="Enter coupon code" />
+          
+          <div *ngIf="f.submitted || (coupon_code.invalid && coupon_code.touched)" class="col-sm-12 text-danger validation-error">
+                <div *ngIf = "coupon_code.errors?.required">
+                   Coupon code field can't be blank
+               </div>                               
+          </div>
+         </div>
+          <label class="checkbox">              
+            <button type="submit"  class="primary-btn">Free order - payment not necessary</button>
           </label>
-        
+          
   </div>
 </div> 
 <!-- end name -->
 <!-- start keep logged -->
 
-<div class="unit padding-bottom-18">
-
-        <button type="submit" class="primary-btn">SUBMIT ORDER</button>
-</div>
+      <!--<div class="unit padding-bottom-18" *ngIf="pay.payment_method" > 
+        
+        
+      </div>
+      <div class="unit padding-bottom-18" *ngIf="!pay.payment_method" > 
+          <button type="submit"  class="primary-btn">SUBMIT ORDER</button>
+      </div>-->
 </div>
 
 <!-- Order Summary -->
@@ -121,13 +129,13 @@ Mobile Number : {{phone}}
           <th>Title/File Name</th>
           <th>Cost</th>
         </tr>
-        <tr *ngFor="let item of orderFiles; let index = index">
+        <tr *ngFor="let item of orderFiles.files; let index = index">
           <td>{{item.file_name}}</td>
-          <td>{{item.cost | currency}}</td>
+          <td>{{item.cost | currency:'USD':true:'1.2-2' }}</td>
         </tr>
         <tr>
           <td>Total</td>
-            <td>{{order_tot_cost | currency}}</td>
+            <td>{{orderFiles.tot_cost | currency:'USD' }}</td>
           </tr>
       </table>
 
