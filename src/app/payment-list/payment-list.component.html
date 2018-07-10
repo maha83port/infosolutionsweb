@@ -74,21 +74,18 @@ Mobile Number : {{phone}}
 <div class="divider gap-bottom-25"></div>
 
 <!-- start name -->
+<div *ngIf="orderFiles.files?.length > 0">
 <h3>Payment method:</h3>
-
 <div class="j-row">
-<div class="span6 unit">
-    
-        <label class="checkbox">         
-          <h4 *ngIf="paypalLoad">Paypal button is loading</h4>    
-          <div id="paypal-checkout-btn"></div> 
-        </label>
-        
-      
-</div>
+  <div class="span6 unit">    
+    <label class="checkbox">         
+        <h4 *ngIf="paypalLoad">Paypal button is loading</h4>    
+        <div id="paypal-checkout-btn"></div> 
+    </label>     
+  </div>
 </div> 
 
-<div class="j-row">
+<div class="j-row" >
   <div class="span6 unit">
       
          <div *ngIf="couponcodeshow">
@@ -106,16 +103,7 @@ Mobile Number : {{phone}}
           
   </div>
 </div> 
-<!-- end name -->
-<!-- start keep logged -->
-
-      <!--<div class="unit padding-bottom-18" *ngIf="pay.payment_method" > 
-        
-        
-      </div>
-      <div class="unit padding-bottom-18" *ngIf="!pay.payment_method" > 
-          <button type="submit"  class="primary-btn">SUBMIT ORDER</button>
-      </div>-->
+</div>
 </div>
 
 <!-- Order Summary -->
@@ -124,7 +112,13 @@ Mobile Number : {{phone}}
 
    <div class="j-row">
     <div class="span12 unit">
-      <table class="table">
+      <table class="table"  *ngIf="orderFiles.files?.length <= 0">
+          <tr>
+              <td colspan="2"> Your cart is empty</td>
+            </tr>
+      </table>
+      <table class="table"   *ngIf="orderFiles.files?.length > 0">
+
         <tr>
           <th>Title/File Name</th>
           <th>Cost</th>

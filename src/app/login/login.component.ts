@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
  get password() { return this.signupForm.get('password'); }
 
  public onFormSubmit() {
+   
   if(this.signupForm.valid) {   
       this.user = this.signupForm.value;
       console.log(this.user);
@@ -49,6 +50,7 @@ export class LoginComponent implements OnInit {
           this.login = false;
           this.logouts = true;         
           //this.router.navigate(['user-dashboard']);
+          
           this._location.back();
         } else {
           this._flashMessagesService.show(data['message'], { cssClass: 'alert-danger' });
