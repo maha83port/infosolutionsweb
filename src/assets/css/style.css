@@ -9,7 +9,7 @@ body {
   font-weight: 400;
   color: #6a6a6a;
   background-color: #ffffff;
-  overflow-x: hidden; }
+ }
   body.dark-layout {
     color: #696969;
     background-color: #1f1f1f; }
@@ -958,9 +958,9 @@ textarea, select {
             color: #313131;
             background-color: transparent; }
 			#navmenu .dropdown-submenu{position:relative;}
-#navmenu .dropdown-submenu>.dropdown-menu{top:0;left:100%;margin-top:-6px;margin-left:-8px; min-width:190px; padding:0px;}
-#navmenu .dropdown-submenu:hover>.dropdown-menu{display:block;margin-top: 0px;
-    margin-left:0px;}
+#navmenu .dropdown-submenu>.dropdown-menu{top:0;left:100%;margin-top:-6px;transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s, z-index 0s linear 0.01s;margin-left:-8px;visibility: hidden; min-width:190px; padding:0px;display:none;}
+#navmenu .dropdown-submenu:hover>.dropdown-menu{display:block;margin-top: 0px;visibility: visible;
+    margin-left:0px;     }
 #navmenu .dropdown-submenu>a:after{display:block;content:" ";float:right;width:0;height:0;border-color:transparent;border-style:solid;border-width:5px 0 5px 5px;border-left-color:#cccccc;margin-top:18px;margin-right:-10px;}
 #navmenu .dropdown-submenu:hover>a:after{border-left-color:#222222;}
 #navmenu .dropdown-submenu>.dropdown-menu li{ padding-bottom:0px;}
@@ -973,7 +973,7 @@ textarea, select {
             transition-delay: 0s, 0s, 0.3s; }
           .header-section .navbar .navbar-collapse .navbar-nav li .dropdown-menu {
             background-color: #FFFFFF;
-            padding: 7px 0;
+            padding: 7px 0;display: block;visibility: hidden;
             border: 0; opacity:0;
             transform: translateY(-2em);
             transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s, z-index 0s linear 0.01s; }
@@ -3423,6 +3423,8 @@ section.pricing-section.section-padding{padding-top:50px; padding-bottom:20px;}
   .contact-section .contact-wrapper {
     padding: 50px 50px;
     box-shadow: 0 0 15px #d6d5d5; }
+    .contact-section .contact-left-bar .form-group{position:relative; margin-bottom:25px;}
+    .contact-section .contact-left-bar .validation-error{position: absolute;bottom: 3px;left: 0;margin:0;}
     @media only screen and (max-width: 991px) {
       .contact-section .contact-wrapper {
         padding: 50px 100px; }.contact-section.login{padding: 50px 100px;} }
@@ -9182,7 +9184,6 @@ border: none;
 text-shadow: none;
 box-shadow: none;
 transition: all 0.12s linear 0s !important;
-font: 14px/20px "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 .btn-cons {
 margin-right: 5px;
@@ -9250,7 +9251,7 @@ box-shadow: inset 0 1px 0 rgba(255,255,255,0.15),0 1px 1px rgba(0,0,0,0.075);
 .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn){width:247px !important;}
 .btn-default:hover{background:#fff !important;}
 .error{color:#F00 }
-.validation-error{font-size: 14px; margin:5px 0;}
+.validation-error{font-size: 14px; margin:5px 0;color:#ff0000d4;}
 #flashMessages{
   position: fixed !important;
 width: 20%;z-index: 100;
