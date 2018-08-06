@@ -50,7 +50,7 @@
 
       <div class="j-row">
           
-      <div class="span6 unit">      
+      <div class="span4 unit">      
       <div class="unit">
           <div class="input">
             <input type="text"  name="title" [(ngModel)]="disc.title" #title="ngModel" placeholder="Title" />
@@ -67,52 +67,82 @@
       </div>
       <!-- end keep logged -->    
       </div>
-    
-    
-      <!-- end login -->
-
-      <!-- start password -->
-      <div class="span6 unit">
-      <div class="unit">
-        <!--Start UPLOAD-->
-              <form #f="ngForm" enctype="multipart/form-data" novalidate>              
-              <div class="dropbox">
-                <input type="file" multiple
-                  name="uploadFieldName[]" (change)="filesChange($event.target.name, $event.target.files)" 
-                  [disabled]="currentStatus === STATUS_SAVING" accept="pdf/*" #photos>
-                <p *ngIf="currentStatus === STATUS_INITIAL">
-                  Drag your file(s) here to begin<br>
-                  or click to browse
-                </p>
-                <p *ngIf="currentStatus === STATUS_SAVING">
-                  Uploading {{ photos.files.length }} files... 
-                </p>
+      <div class="span8 unit">
+      <div id="exTab3" >	
+        <ul  class="nav nav-pills">
+              <li class="active">
+                <a  href="#1b" data-toggle="tab">Upload File</a>
+              </li>
+              <li><a href="#2b" data-toggle="tab">URL</a>
+              </li>
+              <!--<li><a href="#3b" data-toggle="tab">Applying clearfix</a>
+              </li>
+              <li><a href="#4a" data-toggle="tab">Background color</a>
+              </li>-->
+            </ul>
+      
+            <div class="tab-content clearfix">
+              <div class="tab-pane active" id="1b">
+                 <!-- uplod section -->
+                  <div class="unit">
+                    <!--Start UPLOAD-->
+                          <form #f="ngForm" enctype="multipart/form-data" novalidate>              
+                          <div class="dropbox">
+                            <input type="file" multiple
+                              name="uploadFieldName[]" (change)="filesChange($event.target.name, $event.target.files)" 
+                              [disabled]="currentStatus === STATUS_SAVING" accept="pdf/*" #photos>
+                            <p *ngIf="currentStatus === STATUS_INITIAL">
+                              Drag your file(s) here to begin<br>
+                              or click to browse
+                            </p>
+                            <p *ngIf="currentStatus === STATUS_SAVING">
+                              Uploading {{ photos.files.length }} files... 
+                            </p>
+                          </div>
+                        </form>
+                        <!--SUCCESS-->
+                        <!--<div class="margin-20" *ngIf="currentStatus === STATUS_SUCCESS">
+                          
+                          
+                          <p>
+                            <a href="javascript:void(0)" (click)="reset()">Upload again</a>
+                          </p>
+                          <ul class="list-unstyled">
+                            <li *ngFor="let item of uploadedFiles">
+                              {{item.url}}
+                            </li>
+                          </ul>
+                        </div>-->
+                        <!--FAILED-->
+                        <div class="margin-20" *ngIf="currentStatus === STATUS_FAILED">
+                          <p class="error">Uploaded failed.</p>
+                          <p>
+                            <a href="javascript:void(0)" (click)="reset()">Try again</a>
+                          </p>
+                          <pre>{{ uploadError | json }}</pre>
+                        </div>
+                        <!-- End File Upload -->
+                  </div>
+              <!-- end upload section -->
               </div>
-            </form>
-            <!--SUCCESS-->
-            <!--<div class="margin-20" *ngIf="currentStatus === STATUS_SUCCESS">
-              
-              
-              <p>
-                <a href="javascript:void(0)" (click)="reset()">Upload again</a>
-              </p>
-              <ul class="list-unstyled">
-                <li *ngFor="let item of uploadedFiles">
-                  {{item.url}}
-                </li>
-              </ul>
-            </div>-->
-            <!--FAILED-->
-            <div class="margin-20" *ngIf="currentStatus === STATUS_FAILED">
-              <p class="error">Uploaded failed.</p>
-              <p>
-                <a href="javascript:void(0)" (click)="reset()">Try again</a>
-              </p>
-              <pre>{{ uploadError | json }}</pre>
+                <div class="tab-pane" id="2b">
+                  <div class="input">
+                    <input type="text"  name="url" [(ngModel)]="disc.url" #url="ngModel" placeholder="http://" />
+                    <button  class="primary-btn" (click)="addUrl(disc)" type="submit">ADD URL</button>
+                  </div>
+                </div>
+                <!--<div class="tab-pane" id="3b">
+                  <h3>We applied clearfix to the tab-content to rid of the gap between the tab and the content</h3>
+                </div>
+                <div class="tab-pane" id="4b">
+                <h3>We use css to change the background color of the content to be equal to the tab</h3>
+               </div>-->
             </div>
-            <!-- End File Upload -->
-      </div>
-      </div>
+        </div>
+      
+         
+        </div>
+       
       </div>      
 
     </div>

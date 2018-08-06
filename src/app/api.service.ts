@@ -74,5 +74,8 @@ export class ApiService {
   checkCouponCode(user, session_id, coupon){
     return this.http.post(this.appURL + 'checkCouponCode', JSON.stringify({ user: user, session_id: session_id, coupon: coupon }));
   }
+  addUrl(url, session_id, service_id, service_name){
+    return this.http.post(this.appURL + 'addUrl', JSON.stringify({ url: url, session_id: session_id, service_id: service_id, service_name:service_name }));
+  }
 
 }

@@ -281,7 +281,7 @@ orderDelete(id, index){
     let typeError = true;
     //console.log(fileList);
     //console.log(fieldName);
-    this.session_id = this.ApiService.getLocalSession('current_session_id')
+    this.session_id = this.ApiService.getLocalSession('current_session_id');
     if (!fileList.length) return;
     
     // append the files to FormData
@@ -420,6 +420,23 @@ loginReg(){
   
 }
 
+addUrl(){
+  let session_id = this.ApiService.getLocalSession('current_session_id');
+  this.ApiService.addUrl(this.disc.url, session_id, this.sid, this.sname)
+  .subscribe(
+  data => {
+    if(data['status'] == 'success'){       
+      this._flashMessagesService.show(data['message'], { cssClass: 'alert-success' });  
+      this.getService();
+      this.getFileList();
+    }else{
+      this._flashMessagesService.show('Error in the Data/Server', { cssClass: 'alert-danger' });
+    }
+  },
+  error => {
+    this._flashMessagesService.show('Error in the Data/Server', { cssClass: 'alert-danger' });
+  });
+}
   // End file upload
 
 }
